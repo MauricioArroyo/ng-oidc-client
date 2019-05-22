@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Log, OidcClient, SigninRequest, SignoutRequest, User as OidcUser, UserManager } from 'oidc-client';
+import { Log, OidcClient, SigninRequest, SignoutRequest, User as OidcUser, UserManager, WebStorageStateStore } from 'oidc-client';
 import { from, Observable } from 'rxjs';
 import { Config, OIDC_CONFIG } from '../models/config.model';
 import { OidcEvent, StorageKeys } from '../models';
@@ -33,6 +33,11 @@ export class OidcService {
       clientSettings = {
         ...clientSettings,
         userStore: clientSettings.userStore()
+      };
+    } else {
+      clientSettings = {
+        ...clientSettings,
+        userStore: new WebStorageStateStore({store: window.localStorage})
       };
     }
 
